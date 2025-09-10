@@ -5,6 +5,9 @@ import os
 import torch
 import gc
 import psutil
+import re
+
+from Text_manipulation.Cleaning import clean_continuation
 
 #todo aggiungere configurazione e ritestare
 #todo aggiungere controlli per liste vuote
@@ -78,41 +81,36 @@ def process_model(model_name, model_path, files, OUTPUT_DIR, gen_params, flag_BW
             generator.tokenizer(bw, add_special_tokens=False).input_ids
             for bw in bad_words
         ]
-
-        # Assign correctly
         gen_params["bad_words_ids"] = bad_words_ids
-
         output_dir = os.path.join(OUTPUT_DIR, model_name + '_BW')
     else:
         output_dir = os.path.join(OUTPUT_DIR, model_name)
 
     os.makedirs(output_dir, exist_ok=True)
 
-
     try:
         for label, input_file in files.items():
             print(f"#   Processing file {input_file} for model {model_name}")
             df = pd.read_csv(input_file)
-            prompts = df["Prompts"].head(3).tolist()
+            prompts = df["Prompts"].tolist()
 
-            output_file = os.path.join(output_dir, f"Responses_{label}.csv")
+            output_file = os.path.join(output_dir, f"responses_{label}.csv")
 
             # Initialize output file
             with open(output_file, "w", encoding="utf-8") as f:
-                f.write("Prompt,Continuation\n")
+                f.write("Prompts,Continuation\n")
 
             batch_size = 16  # tune depending on VRAM
             all_results = []
 
             for i in tqdm(range(0, len(prompts), batch_size), desc=f"{model_name} - {label}"):
                 batch = prompts[i:i + batch_size]
-
                 outputs = generator(batch, **gen_params)
 
                 # outputs is nested list if batch_size > 1
                 for prompt, outs in zip(batch, outputs):
                     generated_texts = [
-                        out["generated_text"][len(prompt):].replace("\n", " ").strip()
+                        clean_continuation(out["generated_text"][len(prompt):])
                         for out in (outs if isinstance(outs, list) else [outs])
                     ]
                     for text in generated_texts:
@@ -123,14 +121,13 @@ def process_model(model_name, model_path, files, OUTPUT_DIR, gen_params, flag_BW
             results_df.to_csv(output_file, mode="a", index=False, header=False, encoding="utf-8")
 
     except KeyboardInterrupt:
-        print("\n Interrupted! Saving partial results...")
+        print("\n⏸ Interrupted! Saving partial results...")
         if "all_results" in locals() and all_results:
             results_df = pd.DataFrame(all_results, columns=["Prompts", "Continuation"])
             results_df.to_csv(output_file, mode="a", index=False, header=False, encoding="utf-8")
         raise
 
     finally:
-        # Free GPU memory
         free_model(generator)
         print_memory_usage("After freeing")
 
