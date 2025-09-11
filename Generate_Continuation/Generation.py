@@ -21,13 +21,13 @@ OUTPUT_DIR = "../DataBase/Generated"
 mapped_models = {
     'GPT-2': 'gpt2',
     'GPT-1': 'openai-gpt',
-    #'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
+    'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
 }
 
 bad_word_mapped_model = {
     'GPT-2': 'gpt2',
     'GPT-1': 'openai-gpt',
-    #'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
+    'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
 }
 
 gen_params = {
