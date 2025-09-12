@@ -1,0 +1,7 @@
+pandas~=2.2.3
+psutil~=7.0.0
+torch~=2.3.1
+datasets~=4.0.0
+tqdm~=4.66.6
+transformers~=4.55.4
+requests~=2.32.5
