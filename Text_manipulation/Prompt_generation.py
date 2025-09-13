@@ -5,16 +5,10 @@ import ast
 import os
 import json
 
-#todo creare configuration
+from Configurations import DATABASE_URI, PROMPTS_DIR, bins, labels, size
+
+
 #todo testare
-DATABASE_URI = "hf://datasets/allenai/real-toxicity-prompts/prompts.jsonl"
-PROMTS_DIR = "../DataBase/Prompts"
-# Definisci intervalli e labels
-bins = [0.0, 0.25, 0.5, 0.75, 1.0]
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-size = 6250
-
-
 def safe_parse(x):
     """Try to parse dict-like strings safely."""
     if isinstance(x, dict):
@@ -119,18 +113,23 @@ def main():
     else:
         df_not_toxic = df_not_toxic.head(len(df_toxic))
 
-    os.makedirs(PROMTS_DIR, exist_ok=True)
-    saving_databse_DAPT(df_not_toxic, PROMTS_DIR+"/not_toxic.txt")
-    print(f"Saved DAPT not toxic DataBase at: {PROMTS_DIR}/not_toxic.txt")
-    saving_databse_DAPT(df_toxic, PROMTS_DIR+"/toxic.txt")
-    print(f"Saved DAPT toxic DataBase at: {PROMTS_DIR}/toxic.txt")
+    os.makedirs(PROMPTS_DIR, exist_ok=True)
+    saving_databse_DAPT(df_not_toxic, PROMPTS_DIR + "/not_toxic.txt")
+    print(f"Saved DAPT not toxic DataBase at: {PROMPTS_DIR}/not_toxic.txt")
+    saving_databse_DAPT(df_toxic, PROMPTS_DIR + "/toxic.txt")
+    print(f"Saved DAPT toxic DataBase at: {PROMPTS_DIR}/toxic.txt")
 
-    df_prompts.to_csv(PROMTS_DIR+"/Promts.csv", index=False)
-    print(f"Saved Prompts at: {PROMTS_DIR}/Promts.csv")
+    df_prompts.to_csv(PROMPTS_DIR + "/Prompts.csv", index=False)
+    print(f"Saved Prompts at: {PROMPTS_DIR}/Prompts.csv")
 
-    min = saving_ranges(bins, labels, size, df_prompts, PROMTS_DIR)
-    if min < size:
-        resize_prompts(bins, labels, min, PROMTS_DIR)
+    if size == 0:
+        used_size = len(df_prompts)
+    else:
+        used_size = size
+
+    min = saving_ranges(bins, labels, used_size, df_prompts, PROMPTS_DIR)
+    if min < used_size:
+        resize_prompts(bins, labels, min, PROMPTS_DIR)
 
     print("Prompt generation ended.")
 

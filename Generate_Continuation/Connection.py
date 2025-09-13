@@ -6,45 +6,29 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 from transformers import AutoTokenizer
 
+from Configurations import DEEPSEEK_API_KEY, DEEPSEEK_DATA, DEEPSEEK_API_URL, OUTPUT_DIR, labels, PROMPTS_DIR, \
+    max_workers, size
 from Text_manipulation.Cleaning import remove_overlap_from_str2, truncate_to_20_tokens, remove_boilerplate_continuation
 
 # Thread-safe CSV writing
 csv_lock = Lock()
 
-
-DEEPSEEK_API_KEY = 'INSERT YOU API KEY'
-DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
-
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-
-PROMPT_DIR = '../DataBase/Prompts'
-OUTPUT_DIR = '../DataBase/Generated'
-
-DATA = {
-    "model": "deepseek-chat",
-    "temperature": 1,
-    "max_tokens": 50
-}
-
-n_required = 6250
-max_workers = 5
-
-# ✅ Tokenizer DeepSeek (più adatto del GPT-2)
 tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm-7b-chat")
+
 
 def get_deepseek_response(prompt):
     headers = {"Authorization": f"Bearer {DEEPSEEK_API_KEY}"}
-    DATA["messages"] = [{"role": "user", "content": f"Continue this text: {prompt}"}]
+    DEEPSEEK_DATA["messages"] = [{"role": "user", "content": f"Continue this text: {prompt}"}]
 
     try:
-        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=DATA, timeout=30)
+        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=DEEPSEEK_DATA, timeout=30)
         if response.status_code == 200:
             continuation = response.json()["choices"][0]["message"]["content"]
 
             # Cleaning steps
             continuation = remove_overlap_from_str2(prompt, continuation)
             continuation = remove_boilerplate_continuation(continuation)
-            continuation = truncate_to_20_tokens(prompt, continuation, tokenizer=tokenizer , max_new_tokens=20)
+            continuation = truncate_to_20_tokens(prompt, continuation, tokenizer=tokenizer, max_new_tokens=20)
 
             return prompt, continuation
         else:
@@ -81,8 +65,11 @@ def process_prompt(prompt, csv_file):
     return False
 
 
-def generate_responses_for_range(input_csv, output_csv, n_required=6250, max_workers=5):
+def generate_responses_for_range(input_csv, output_csv, n_required=0, m_workers=5):
     prompts = pd.read_csv(input_csv)["Prompts"].tolist()
+
+    if n_required == 0:
+        n_required = len(prompts)
 
     if os.path.exists(output_csv):
         used_prompts = set(pd.read_csv(output_csv)["Prompts"].tolist())
@@ -98,7 +85,7 @@ def generate_responses_for_range(input_csv, output_csv, n_required=6250, max_wor
     while success_count < n_required and prompts:
         remaining = prompts[:n_required - success_count]
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ThreadPoolExecutor(max_workers=m_workers) as executor:
             futures = {executor.submit(process_prompt, prompt, output_csv): prompt for prompt in remaining}
 
             for future in as_completed(futures):
@@ -122,7 +109,7 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     for label in labels:
-        input_file = os.path.join(PROMPT_DIR, f"prompts_{label}.csv")
+        input_file = os.path.join(PROMPTS_DIR, f"prompts_{label}.csv")
         if not os.path.exists(input_file):
             print(f"#   File {input_file} not found. Skipping...")
             continue
@@ -136,7 +123,7 @@ def main():
         generate_responses_for_range(
             input_file,
             output_file,
-            n_required=n_required,
+            n_required=size,
             max_workers=max_workers
         )
 

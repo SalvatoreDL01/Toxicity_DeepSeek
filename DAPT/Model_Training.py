@@ -3,16 +3,10 @@ import os.path
 from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
 from datasets import Dataset
 
+from Configurations import PROMPTS_DIR, TRAIN_DIR, TRAIN_MODEL_NAME, TRAIN_MODEL_PATH
 from DAPT.Generation import free_model
 
-TRAIN_DIR = '../DAPT/models'
 
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-
-PROMPT_DIR = '../DataBase/Prompts'
-
-TRAIN_MODEL_PATH = 'gpt2'
-TRAIN_MODEL_NAME = 'GPT-2'
 
 
 def make_database(txt_path):
@@ -98,8 +92,8 @@ def train_model(model_name, model_path, database_path, dir):
 
 
 def main():
-    database_path_toxic = os.path.join(PROMPT_DIR, 'toxic.txt')
-    database_path_not_toxic = os.path.join(PROMPT_DIR, 'not_toxic.txt')
+    database_path_toxic = os.path.join(PROMPTS_DIR, 'toxic.txt')
+    database_path_not_toxic = os.path.join(PROMPTS_DIR, 'not_toxic.txt')
     output_dir_toxic = os.path.join(TRAIN_DIR, TRAIN_MODEL_NAME + "_toxic")
     output_dir_not_toxic = os.path.join(TRAIN_DIR, TRAIN_MODEL_NAME + "_not_toxic")
 

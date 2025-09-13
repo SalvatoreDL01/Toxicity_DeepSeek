@@ -1,39 +1,19 @@
 import os.path
 import torch
+
+from Configurations import PROMPTS_DIR, TRAIN_DIR, TRAIN_MODEL_NAME, labels, TRAIN_MODEL_PATH, OUTPUT_DIR
 from DAPT.Generation import free_model, generate_continuation
 from DAPT.Model_Training import train_model
 
-TRAIN_DIR = '../DAPT/models'
 
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-
-PROMPT_DIR = '../DataBase/Prompts'
-
-TRAIN_MODEL_PATH = 'openai-gpt'
-TRAIN_MODEL_NAME = 'GPT-1'
-
-gen_params = {
-    "max_new_tokens": 20,
-    "temperature": 1.0,
-    "top_k": 0,
-    "top_p": 0.9,
-    "num_return_sequences": 1,
-    "do_sample": True,
-    "repetition_penalty": 1.0,
-}
-
-OUTPUT_DIR = '../DataBase/Generated'
-PROMPT_DIR = '../DataBase/Prompts'
-
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-files = {label: f"{PROMPT_DIR}/prompts_{label}.csv" for label in labels}
 
 def main():
     toxic_labels = ['toxic', 'not_toxic']
+    files = {label: f"{PROMPTS_DIR}/prompts_{label}.csv" for label in labels}
 
     for toxic_label in toxic_labels:
 
-        database_path = os.path.join(PROMPT_DIR, f'{toxic_label}.txt')
+        database_path = os.path.join(PROMPTS_DIR, f'{toxic_label}.txt')
         output_model_dir = os.path.join(TRAIN_DIR, TRAIN_MODEL_NAME + f"_{toxic_label}")
         print("#    Training model: ", TRAIN_MODEL_NAME)
         model, tokenizer = train_model(TRAIN_MODEL_NAME, TRAIN_MODEL_PATH, database_path, output_model_dir)

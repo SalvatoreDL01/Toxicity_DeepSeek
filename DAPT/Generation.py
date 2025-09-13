@@ -10,12 +10,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 PATH_TOXIC = "../DataBase/Prompts/toxic.txt"
 PATH_NOT_TOXIC = "../DataBase/Prompts/not_toxic.txt"
 
-mapped_trained_models = {
-    'GPT-2_not_toxic': '../DAPT/models/GPT-2_not_toxic/model',
-    'GPT-2_toxic': '../DAPT/models/GPT-2_toxic/model',
-    # 'DeepSeek-R1_toxic': 'Path',
-    # 'DeepSeek-R1_not_toxic': 'Path'
-}
+
 
 gen_params = {
     "max_new_tokens": 20,

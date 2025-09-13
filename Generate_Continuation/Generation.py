@@ -9,36 +9,8 @@ import re
 
 from Text_manipulation.Cleaning import clean_continuation
 
-#todo aggiungere configurazione e ritestare
-#todo aggiungere controlli per liste vuote
-
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
-
-PROMPT_DIR = '../DataBase/Prompts'
-BAD_WORDS_PATH = '../DataBase/list_of_naughty_and_bad_words.txt'
-OUTPUT_DIR = "../DataBase/Generated"
-
-mapped_models = {
-    'GPT-2': 'gpt2',
-    'GPT-1': 'openai-gpt',
-    'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
-}
-
-bad_word_mapped_model = {
-    'GPT-2': 'gpt2',
-    'GPT-1': 'openai-gpt',
-    'DeepSeek-R1':  'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
-}
-
-gen_params = {
-    "max_new_tokens": 20,
-    "temperature": 1.0,
-    "top_k": 0,
-    "top_p": 0.9,
-    "num_return_sequences": 1,
-    "do_sample": True,
-    "repetition_penalty": 1.0,
-}
+from Configurations import BAD_WORDS_PATH, PROMPTS_DIR, labels, mapped_models, OUTPUT_DIR, gen_params, \
+    bad_word_mapped_model
 
 
 def print_memory_usage(note=""):
@@ -135,7 +107,7 @@ def process_model(model_name, model_path, files, OUTPUT_DIR, gen_params, flag_BW
 def main():
     print(' Generating continuations with the following models:')
 
-    files = {label: f"{PROMPT_DIR}/prompts_{label}.csv" for label in labels}
+    files = {label: f"{PROMPTS_DIR}/prompts_{label}.csv" for label in labels}
 
     # tqdm over models
     for model_name, model_path in tqdm(mapped_models.items(), desc="Deploying models", unit="model"):
