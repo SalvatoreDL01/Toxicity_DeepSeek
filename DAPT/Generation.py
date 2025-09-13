@@ -7,25 +7,7 @@ from tqdm import tqdm
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 
-PATH_TOXIC = "../DataBase/Prompts/toxic.txt"
-PATH_NOT_TOXIC = "../DataBase/Prompts/not_toxic.txt"
-
-
-
-gen_params = {
-    "max_new_tokens": 20,
-    "temperature": 1.0,
-    "top_k": 0,
-    "top_p": 0.9,
-    "num_return_sequences": 1,
-    "do_sample": True,
-    "repetition_penalty": 1.0,
-}
-
-OUTPUT_DIR = '../DataBase/Generated'
-PROMPT_DIR = '../DataBase/Prompts'
-
-labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
+from Configurations import mapped_trained_models, gen_params, PROMPTS_DIR, labels, OUTPUT_DIR
 
 
 def print_memory_usage(note=""):
@@ -52,7 +34,7 @@ def free_model(generator=None, model=None, tokenizer=None):
         torch.cuda.empty_cache()
 
 
-def generate_continuation(device,  model, tokenizer, output_dir, files):
+def generate_continuation(device, model, tokenizer, output_dir, files):
     # Batch size (tune depending on VRAM)
     batch_size = 8 if device == "cuda" else 1
 
@@ -83,7 +65,6 @@ def generate_continuation(device,  model, tokenizer, output_dir, files):
                 **gen_params,
             )
 
-
             # Decode results
             decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
@@ -106,7 +87,7 @@ def generate_continuation(device,  model, tokenizer, output_dir, files):
 
 
 def main():
-    files = {label: f"{PROMPT_DIR}/prompts_{label}.csv" for label in labels}
+    files = {label: f"{PROMPTS_DIR}/prompts_{label}.csv" for label in labels}
     # Detect GPU
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
@@ -126,7 +107,7 @@ def main():
         output_dir = os.path.join(OUTPUT_DIR, model_name)
         os.makedirs(output_dir, exist_ok=True)
 
-        generate_continuation(device,  model, tokenizer, output_dir, files)
+        generate_continuation(device, model, tokenizer, output_dir, files)
 
         free_model(generator=None, model=model, tokenizer=tokenizer)
 

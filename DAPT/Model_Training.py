@@ -7,8 +7,6 @@ from Configurations import PROMPTS_DIR, TRAIN_DIR, TRAIN_MODEL_NAME, TRAIN_MODEL
 from DAPT.Generation import free_model
 
 
-
-
 def make_database(txt_path):
     with open(txt_path, "r", encoding="utf-8") as f:
         text = f.read()
@@ -43,7 +41,8 @@ def map_tokens(tokenizer, dataset):
 
     return tokenized_dataset, data_collator
 
-def train_model(model_name, model_path, database_path, dir):
+
+def train_model(model_path, database_path, dir):
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     if tokenizer.pad_token is None:
         tokenizer.add_special_tokens({'pad_token': '[PAD]'})  # Add pad token
@@ -97,13 +96,12 @@ def main():
     output_dir_toxic = os.path.join(TRAIN_DIR, TRAIN_MODEL_NAME + "_toxic")
     output_dir_not_toxic = os.path.join(TRAIN_DIR, TRAIN_MODEL_NAME + "_not_toxic")
 
-    model, tokenizer = train_model(TRAIN_MODEL_NAME, TRAIN_MODEL_PATH, database_path_toxic, output_dir_toxic)
+    model, tokenizer = train_model(TRAIN_MODEL_PATH, database_path_toxic, output_dir_toxic)
     free_model(generator=None, model=model, tokenizer=tokenizer)
 
-    model, tokenizer = train_model(TRAIN_MODEL_NAME, TRAIN_MODEL_PATH, database_path_not_toxic, output_dir_not_toxic)
+    model, tokenizer = train_model(TRAIN_MODEL_PATH, database_path_not_toxic, output_dir_not_toxic)
     free_model(generator=None, model=model, tokenizer=tokenizer)
 
 
 if __name__ == '__main__':
     main()
-

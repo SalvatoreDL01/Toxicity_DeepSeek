@@ -110,7 +110,7 @@ max_workers = 5
 
 TRAIN_DIR = '../DAPT/models'
 
-TRAIN_MODEL_PATH = 'deepseek-chat'
+TRAIN_MODEL_PATH = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
 TRAIN_MODEL_NAME = 'DeepSeek-R1'
 
 
@@ -144,10 +144,11 @@ model_dirs = {
     "GPT-2": "../DataBase/Generated/GPT-2",
     "DeepSeek-R1": "../DataBase/Generated/DeepSeek-R1",
     "DeepSeek_API": "../DataBase/Generated/DeepSeek_API",
-    "GPT-1_BW": "../DataBase/Generated/GPT-1_BW",
-    "GPT-2_BW": "../DataBase/Generated/GPT-2_BW",
-    "DeepSeek_BW": "../DataBase/Generated/DeepSeek_BW",
-
+    #"GPT-1_BW": "../DataBase/Generated/GPT-1_BW",
+    #"GPT-2_BW": "../DataBase/Generated/GPT-2_BW",
+    "DeepSeek-R1_BW": "../DataBase/Generated/DeepSeek_BW",
+    "DeepSeek-R1_toxic": "../DataBase/Generated/DeepSeek_toxic",
+    "DeepSeek-R1_not_toxic": "../DataBase/Generated/DeepSeek_not_toxic",
 }
 
 perspective_attributes = [
