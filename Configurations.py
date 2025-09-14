@@ -28,13 +28,13 @@ size = 6250
 """
     Prompts directory and labels. Used in basically every script since they provide access to the prompts and DAPT DBs.
 """
-PROMPTS_DIR = "../DataBase/Prompts"
+PROMPTS_DIR = "./DataBase/Prompts"
 labels = ['0-0.25', '0.25-0.5', '0.5-0.75', '0.75-1.0']
 
 """
     List of tokens that we force the model not to generate.
 """
-BAD_WORDS_PATH = '../DataBase/list_of_naughty_and_bad_words.txt'
+BAD_WORDS_PATH = './DataBase/list_of_naughty_and_bad_words.txt'
 
 """
     Directory containing the generated continuation. The directory is divided in subdirectories, each named after the
@@ -44,7 +44,7 @@ BAD_WORDS_PATH = '../DataBase/list_of_naughty_and_bad_words.txt'
         - {model name}_not_toxic and {model name}_toxic: are the results of the DAPT execution.
     Each subdirectory contains as many responses.csv as there are labels.
 """
-OUTPUT_DIR = "../DataBase/Generated"
+OUTPUT_DIR = "./DataBase/Generated"
 
 """
     Models mapped with their huggingface path. If you want to add more you just need to add a new row.
@@ -82,7 +82,7 @@ gen_params = {
 """
     Section dedicated to the DeepSeek-API prompt generation.
 """
-DEEPSEEK_API_KEY = 'INSERT YOU API KEY'
+DEEPSEEK_API_KEY = 'INSERT YOUR API KEY'
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 """
@@ -108,7 +108,7 @@ max_workers = 5
     preceding generation and to adapt the TRAIN_MODEL_NAME variable.
 """
 
-TRAIN_DIR = '../DAPT/models'
+TRAIN_DIR = './DAPT/models'
 
 TRAIN_MODEL_PATH = 'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B'
 TRAIN_MODEL_NAME = 'DeepSeek-R1'
@@ -119,10 +119,8 @@ TRAIN_MODEL_NAME = 'DeepSeek-R1'
     have a already trained model because Training_and_Generate.py uses the model as soon as it has been trained.
 """
 mapped_trained_models = {
-    #'GPT-2_not_toxic': '../DAPT/models/GPT-2_not_toxic/model',
-    #'GPT-2_toxic': '../DAPT/models/GPT-2_toxic/model',
-    'DeepSeek-R1_toxic': '../DAPT/models/DeepSeek-R1_toxic/model',
-    'DeepSeek-R1_not_toxic': '../DAPT/models/DeepSeek-R1_not_toxic/model',
+    'DeepSeek-R1_toxic': './DAPT/models/DeepSeek-R1_toxic/model',
+    'DeepSeek-R1_not_toxic': './DAPT/models/DeepSeek-R1_not_toxic/model',
 }
 
 """
@@ -135,20 +133,18 @@ mapped_trained_models = {
     - perspective_attributes are the different classes of 'toxic speach' that we want to get evaluated by Perspective
       CNN.
 """
-PERSPECTIVE_API_KEY = "YOUR API KEY"
+PERSPECTIVE_API_KEY = "INSERT YOUR API KEY"
 
-PERSPECTIVE_OUTPUT_DIR = "../Perspective/results/"
+PERSPECTIVE_OUTPUT_DIR = "./Perspective/results/"
 
 model_dirs = {
-    "GPT-1": "../DataBase/Generated/GPT-1",
-    "GPT-2": "../DataBase/Generated/GPT-2",
-    "DeepSeek-R1": "../DataBase/Generated/DeepSeek-R1",
-    "DeepSeek_API": "../DataBase/Generated/DeepSeek_API",
-    #"GPT-1_BW": "../DataBase/Generated/GPT-1_BW",
-    #"GPT-2_BW": "../DataBase/Generated/GPT-2_BW",
-    "DeepSeek-R1_BW": "../DataBase/Generated/DeepSeek_BW",
-    "DeepSeek-R1_toxic": "../DataBase/Generated/DeepSeek_toxic",
-    "DeepSeek-R1_not_toxic": "../DataBase/Generated/DeepSeek_not_toxic",
+    "GPT-1": "./DataBase/Generated/GPT-1",
+    "GPT-2": "./DataBase/Generated/GPT-2",
+    "DeepSeek-R1": "./DataBase/Generated/DeepSeek-R1",
+    "DeepSeek_API": "./DataBase/Generated/DeepSeek_API",
+    "DeepSeek-R1_BW": "./DataBase/Generated/DeepSeek-R1_BW",
+    "DeepSeek-R1_toxic": "./DataBase/Generated/DeepSeek-R1_toxic",
+    "DeepSeek-R1_not_toxic": "./DataBase/Generated/DeepSeek-R1_not_toxic",
 }
 
 perspective_attributes = [

@@ -8,6 +8,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 
 from Configurations import mapped_trained_models, gen_params, PROMPTS_DIR, labels, OUTPUT_DIR
+from Text_manipulation.Cleaning import clean_continuation
 
 
 def print_memory_usage(note=""):
@@ -71,7 +72,8 @@ def generate_continuation(device, model, tokenizer, output_dir, files):
             # Estrarre solo la continuation (senza prompt iniziale)
             results = []
             for prompt, full_text in zip(batch, decoded):
-                continuation = full_text[len(prompt):].replace("\n", " ").strip()
+                continuation = clean_continuation(full_text[len(prompt):].replace("\n", " ").strip())
+
                 results.append((prompt, continuation))
 
             # Save batch results

@@ -124,7 +124,7 @@ def main():
             input_file,
             output_file,
             n_required=size,
-            max_workers=max_workers
+            m_workers=max_workers
         )
 
 

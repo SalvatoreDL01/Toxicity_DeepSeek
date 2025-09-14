@@ -170,4 +170,5 @@ dependencies:
       - sympy==1.14.0
       - tbb==2021.13.1
       - torch==2.3.1
+      - toxicity-deepseek==0.1
 prefix: C:\Users\utente\anaconda3\envs\Toxicity_DeepSeek
