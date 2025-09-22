@@ -122,6 +122,9 @@ def main():
     df_prompts.to_csv(PROMPTS_DIR + "/Prompts.csv", index=False)
     print(f"Saved Prompts at: {PROMPTS_DIR}/Prompts.csv")
 
+    df_continuation.to_csv(PROMPTS_DIR + "/Continuation.csv", index=False)
+    print(f"Saved Continuation at: {PROMPTS_DIR}/Continuation.csv")
+
     if size == 0:
         used_size = len(df_prompts)
     else:
