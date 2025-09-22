@@ -3,7 +3,7 @@
 ## Installing
 Run the commands provided in order to set up your environment:
 1. `git clone https://github.com/SalvatoreDL01/Toxicity_DeepSeek.git`
-1. `cd real-Toxicity_DeepSeek`
+1. `cd Toxicity_DeepSeek`
 2. Install [Anaconda](https://docs.anaconda.com/anaconda/install/), then run `conda env create -f environment.yml` to create a new Anaconda environment named `Toxicity_DeepSeek` 
 with all necessary dependencies.
 4. Run `conda activate Toxicity_DeepSeek` before running any further scripts or notebooks.
