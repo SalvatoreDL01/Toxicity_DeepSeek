@@ -1,4 +1,17 @@
-# Toxicity_DeepSeek
+<div align="center">
+    <img src="./logo.png" alt="toxicity DeepSeek logo" width="300"/>
+</div>
+<div align="center">
+  <h1 style="margin-bottom: 0.2em;">Toxicity DeepSeek</h1>
+  <p style="font-size: 1.2em; font-style: italic; margin-top: 0;">
+    Toxicity generation analysis on DeepSeek API and DeepSeek-R1-Distill-Qwen-1.5B
+  </p>
+  <p style="margin-top: 1em;">
+    <a href="https://github.com/SalvatoreDL01" target="_blank">Salvatore Michele De Luca</a>
+  </p>
+</div>
+
+# Toxicity DeepSeek
 
 ## Abstract
 This study builds on the work done in: [RealToxicityPrompts: Evaluating Neural
