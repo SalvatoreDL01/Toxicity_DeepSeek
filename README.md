@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="./logo.png" alt="toxicity DeepSeek logo" width="300"/>
+    <img src="./logo.PNG" alt="toxicity DeepSeek logo" width="300"/>
 </div>
 <div align="center">
   <h1 style="margin-bottom: 0.2em;">Toxicity DeepSeek</h1>
